@@ -120,31 +120,5 @@ npm run dev
 
 ---
 
-## 🚀 发布到 GitHub / Push to GitHub
-
-要在 Github 上托管此项目，请运行以下 Git 命令 / Run the following steps to push to GitHub:
-
-```bash
-# 1. 初始化本地仓库 (如未初始化) / Initialize Git repository
-git init
-
-# 2. 添加所有变更 / Stage all files
-git add .
-
-# 3. 提交变更 / Commit changes
-git commit -m "feat: initial commit of HomeNetGuard"
-
-# 4. 重命名默认分支为 main / Rename branch to main
-git branch -M main
-
-# 5. 关联 GitHub 远程仓库 / Link GitHub remote URL
-git remote add origin https://github.com/<YOUR_USERNAME>/HomeNetGuard.git
-
-# 6. 推送到 GitHub / Push to GitHub
-git push -u origin main
-```
-
----
-
 ## 📄 License
 This project is licensed under the [MIT License](./LICENSE).
