@@ -21,7 +21,7 @@ graph TD
     Backend -->|读写配置与日志| DB[(SQLite 数据库)]
     Backend -->|多语言与缓存| Redis[(Redis 缓存/消息)]
     
-    subgraph 路由器/网关底层 (Gateway Core)
+    subgraph gateway_core_cn ["路由器/网关底层 (Gateway Core)"]
         Daemon[C++ 守护进程 pc_service]
         Daemon -->|读取配置与策略| DB
         Daemon -->|定时同步状态| Redis
@@ -64,7 +64,7 @@ graph TD
     Backend -->|Read/Write Config| DB[(SQLite Database)]
     Backend -->|Multilingual Dict| Redis[(Redis Cache/IPC)]
     
-    subgraph Gateway Core (Router OS)
+    subgraph gateway_core_en ["Gateway Core (Router OS)"]
         Daemon[C++ Daemon pc_service]
         Daemon -->|Fetch Policy/Device| DB
         Daemon -->|Sync Config| Redis
