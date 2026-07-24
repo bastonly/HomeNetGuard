@@ -1,0 +1,88 @@
+/* ================== Theme Variables ================== */
+:root {
+    --bg-page: #f8fafc;
+    --bg-card: #ffffff;
+    --bg-header: rgba(255, 255, 255, 0.92);
+    --text-primary: #0f172a;
+    --text-regular: #64748b;
+    --text-secondary: #94a3b8;
+    --border-light: #eef0f5;
+    --divider-color: #f1f5f9;
+    --primary-color: #3b82f6;
+    --primary-hover: #2563eb;
+    --glass-blur: blur(8px);
+    --bg-subtle: #f8f9fa;
+
+    /* Group Tag Palettes (light) */
+    --tag-blue-bg: #f0f7ff;
+    --tag-blue-fg: #3b82f6;
+    --tag-blue-bd: #dbeafe;
+    --tag-green-bg: #f0fdf4;
+    --tag-green-fg: #10b981;
+    --tag-green-bd: #dcfce7;
+    --tag-orange-bg: #fff7ed;
+    --tag-orange-fg: #f59e0b;
+    --tag-orange-bd: #ffedd5;
+    --tag-purple-bg: #faf5ff;
+    --tag-purple-fg: #a855f7;
+    --tag-purple-bd: #f3e8ff;
+
+    /* status gradients (light) */
+    --status-online-bg: linear-gradient(135deg, #fff 0%, #f0fdf4 100%);
+    --status-online-border: #bbf7d0;
+    --status-blocked-bg: linear-gradient(135deg, #fff 0%, #fff1f2 100%);
+    --status-blocked-border: #fecaca;
+    --status-offline-bg: #f8fafc;
+    --status-offline-border: #e2e8f0;
+}
+
+/* Dark Mode Overrides */
+html.dark {
+    --bg-page: #020617;
+    /* Deeper navy for background */
+    --bg-card: #0f172a;
+    /* Card background */
+    --bg-header: rgba(15, 23, 42, 0.85);
+    --text-primary: #f8fafc;
+    --text-regular: #94a3b8;
+    --text-secondary: #64748b;
+    --border-light: #1e293b;
+    --divider-color: #0f172a;
+    --glass-blur: blur(12px);
+    --bg-subtle: #1e293b;
+
+    /* Group Tag Palettes (dark) */
+    --tag-blue-bg: rgba(59, 130, 246, 0.15);
+    --tag-blue-fg: #60a5fa;
+    --tag-blue-bd: rgba(59, 130, 246, 0.25);
+    --tag-green-bg: rgba(16, 185, 129, 0.15);
+    --tag-green-fg: #34d399;
+    --tag-green-bd: rgba(16, 185, 129, 0.25);
+    --tag-orange-bg: rgba(245, 158, 11, 0.15);
+    --tag-orange-fg: #fbbf24;
+    --tag-orange-bd: rgba(245, 158, 11, 0.25);
+    --tag-purple-bg: rgba(168, 85, 247, 0.15);
+    --tag-purple-fg: #c084fc;
+    --tag-purple-bd: rgba(168, 85, 247, 0.25);
+
+    /* status gradients (dark) */
+    --status-online-bg: linear-gradient(135deg, #0f172a 0%, #064e3b 100%);
+    --status-online-border: rgba(16, 185, 129, 0.2);
+    --status-blocked-bg: linear-gradient(135deg, #0f172a 0%, #450a0a 100%);
+    --status-blocked-border: rgba(244, 63, 94, 0.2);
+    --status-offline-bg: #1e293b;
+    --status-offline-border: rgba(255, 255, 255, 0.1);
+}
+
+/* Global Transitions for smooth switching */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.modern-card,
+.el-card,
+.header-row,
+.overview-card,
+.sidebar-wrap {
+    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease !important;
+}

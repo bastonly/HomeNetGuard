@@ -1,0 +1,119 @@
+FROM alpine:3.19
+
+# 安装基础工具和 ARM aarch64 交叉编译工具链 (musl)
+RUN apk add --no-cache \
+    build-base \
+    gcc-aarch64-none-elf \
+    g++ \
+    make \
+    cmake \
+    git \
+    curl \
+    wget \
+    bash \
+    file
+
+# 下载并安装 aarch64-linux-musl 交叉编译工具链
+RUN cd /tmp && \
+    wget https://musl.cc/aarch64-linux-musl-cross.tgz && \
+    tar -xzf aarch64-linux-musl-cross.tgz -C /opt && \
+    rm aarch64-linux-musl-cross.tgz
+
+# 设置环境变量
+ENV PATH="/opt/aarch64-linux-musl-cross/bin:${PATH}"
+ENV CC=aarch64-linux-musl-gcc
+ENV CXX=aarch64-linux-musl-g++
+ENV AR=aarch64-linux-musl-ar
+ENV RANLIB=aarch64-linux-musl-ranlib
+ENV STRIP=aarch64-linux-musl-strip
+
+# 安装依赖库（需要为 aarch64-musl 编译）
+# 注意：Alpine 的包管理器没有现成的 aarch64 交叉编译库
+# 我们需要从源码编译或使用静态链接
+
+# 依赖库版本
+ENV ZLIB_VERSION=1.3.1
+ENV OPENSSL_VERSION=3.2.1
+ENV CURL_VERSION=8.6.0
+ENV SQLITE_VERSION=3450100
+ENV HIREDIS_VERSION=1.2.0
+
+# 安装构建依赖 (perl for openssl)
+RUN apk add --no-cache perl linux-headers
+
+# 1. 编译 zlib
+RUN cd /tmp && \
+    wget https://github.com/madler/zlib/releases/download/v${ZLIB_VERSION}/zlib-${ZLIB_VERSION}.tar.gz && \
+    tar -xzf zlib-${ZLIB_VERSION}.tar.gz && \
+    cd zlib-${ZLIB_VERSION} && \
+    CC=$CC AR=$AR RANLIB=$RANLIB ./configure --prefix=/opt/aarch64-linux-musl-cross/aarch64-linux-musl --static && \
+    make -j$(nproc) && \
+    make install && \
+    cd /tmp && rm -rf zlib-${ZLIB_VERSION}*
+
+# 2. 编译 OpenSSL
+RUN cd /tmp && \
+    wget https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/openssl-${OPENSSL_VERSION}.tar.gz && \
+    tar -xzf openssl-${OPENSSL_VERSION}.tar.gz && \
+    cd openssl-${OPENSSL_VERSION} && \
+    CC=$CC CXX=$CXX AR=$AR RANLIB=$RANLIB ./Configure linux-aarch64 \
+    --prefix=/opt/aarch64-linux-musl-cross/aarch64-linux-musl \
+    --openssldir=/opt/aarch64-linux-musl-cross/aarch64-linux-musl \
+    no-shared zlib \
+    --with-zlib-include=/opt/aarch64-linux-musl-cross/aarch64-linux-musl/include \
+    --with-zlib-lib=/opt/aarch64-linux-musl-cross/aarch64-linux-musl/lib && \
+    make -j$(nproc) && \
+    make install_sw && \
+    cd /tmp && rm -rf openssl-${OPENSSL_VERSION}*
+
+# 3. 编译 curl
+RUN cd /tmp && \
+    wget https://curl.se/download/curl-${CURL_VERSION}.tar.gz && \
+    tar -xzf curl-${CURL_VERSION}.tar.gz && \
+    cd curl-${CURL_VERSION} && \
+    CC=$CC CXX=$CXX AR=$AR RANLIB=$RANLIB ./configure \
+    --host=aarch64-linux-musl \
+    --prefix=/opt/aarch64-linux-musl-cross/aarch64-linux-musl \
+    --disable-shared --enable-static \
+    --with-openssl --with-zlib \
+    --disable-dict --disable-file --disable-ftp --disable-gopher --disable-imap \
+    --disable-pop3 --disable-rtsp --disable-smtp --disable-telnet --disable-tftp \
+    --disable-ldap --disable-ldaps \
+    --without-libpsl --without-libidn2 \
+    --without-brotli --without-zstd && \
+    make -j$(nproc) && \
+    make install && \
+    cd /tmp && rm -rf curl-${CURL_VERSION}*
+
+# 4. 编译 sqlite3
+RUN cd /tmp && \
+    wget https://www.sqlite.org/2024/sqlite-autoconf-${SQLITE_VERSION}.tar.gz && \
+    tar -xzf sqlite-autoconf-${SQLITE_VERSION}.tar.gz && \
+    cd sqlite-autoconf-${SQLITE_VERSION} && \
+    CC=$CC CXX=$CXX AR=$AR RANLIB=$RANLIB ./configure \
+    --host=aarch64-linux-musl \
+    --prefix=/opt/aarch64-linux-musl-cross/aarch64-linux-musl \
+    --disable-shared --enable-static && \
+    make -j$(nproc) && \
+    make install && \
+    cd /tmp && rm -rf sqlite-autoconf-${SQLITE_VERSION}*
+
+# 5. 编译 hiredis (为 Redis 提供支持)
+RUN cd /tmp && \
+    wget https://github.com/redis/hiredis/archive/v${HIREDIS_VERSION}.tar.gz && \
+    tar -xzf v${HIREDIS_VERSION}.tar.gz && \
+    cd hiredis-${HIREDIS_VERSION} && \
+    make CC=$CC AR=$AR RANLIB=$RANLIB static && \
+    mkdir -p /opt/aarch64-linux-musl-cross/aarch64-linux-musl/include/hiredis && \
+    cp -r *.h /opt/aarch64-linux-musl-cross/aarch64-linux-musl/include/hiredis/ && \
+    cp libhiredis.a /opt/aarch64-linux-musl-cross/aarch64-linux-musl/lib/ && \
+    cd /tmp && rm -rf hiredis-${HIREDIS_VERSION}* v${HIREDIS_VERSION}.tar.gz
+
+# 6. 安装 nlohmann/json (Header only)
+RUN mkdir -p /opt/aarch64-linux-musl-cross/aarch64-linux-musl/include/nlohmann && \
+    wget -O /opt/aarch64-linux-musl-cross/aarch64-linux-musl/include/nlohmann/json.hpp \
+    https://github.com/nlohmann/json/releases/download/v3.11.3/json.hpp
+
+WORKDIR /build
+
+CMD ["/bin/bash"]

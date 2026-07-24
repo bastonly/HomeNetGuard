@@ -1,0 +1,102 @@
+{
+    "ADGUARD": {
+        "SERVER": {
+            "PASSWORD": "adguard_password",
+            "URL": "http://127.0.0.1:3000",
+            "USER": "admin"
+        },
+        "TEMPLATE": {
+            "FunGroup": {
+                "blocked_services": [],
+                "blocked_services_schedule": {
+                    "time_zone": "Asia/Shanghai"
+                },
+                "filtering_enabled": false,
+                "ids": [
+                    "00:11:22:33:44:55"
+                ],
+                "ignore_querylog": false,
+                "ignore_statistics": false,
+                "name": "FunGroup",
+                "parental_enabled": false,
+                "safe_search": {
+                    "bing": true,
+                    "duckduckgo": false,
+                    "ecosia": false,
+                    "enabled": false,
+                    "google": true,
+                    "pixabay": false,
+                    "yandex": false,
+                    "youtube": true
+                },
+                "safebrowsing_enabled": false,
+                "safesearch_enabled": false,
+                "tags": [],
+                "upstreams": [],
+                "upstreams_cache_enabled": false,
+                "upstreams_cache_size": 0,
+                "use_global_blocked_services": false,
+                "use_global_settings": false
+            }
+        }
+    },
+    "JWT": {
+        "JWT_ACCESS_TOKEN_EXPIRES_MINUTES": 60,
+        "JWT_REFRESH_TOKEN_EXPIRES": 7,
+        "JWT_SECRET_KEY": "YOUR_SUPER_SECRET_JWT_KEY_CHANGE_ME"
+    },
+    "REDIS": {
+        "DB": 0,
+        "HOST": "127.0.0.1",
+        "PASSWORD": "",
+        "PORT": 6379
+    },
+    "RETENTION": {
+        "ADGUARD_DETAIL": 5,
+        "ADGUARD_SUMMARY": 20,
+        "SYS_MESSAGES": 15
+    },
+    "SCHEDULER": {
+        "ADGUARD_ANALYSIS_TIME": "01:30",
+        "CLEANUP_TIME": "02:30",
+        "DEVICE_UPDATE_INTERVAL": 60,
+        "ENTERTAINMENT_COLLECT_TIME": "01:00",
+        "ENTERTAINMENT_STATS_TIME": "01:30",
+        "SYNC_NFT_INTERVAL": 60
+    },
+    "SERVER": {
+        "API_Token": "your_server_api_token",
+        "CURRENT_API_VERSION": "1.0.0",
+        "DEVICE_STATUS": "active",
+        "EXPIRED_DATE": "2030-01-01 00:00:00",
+        "EXPIRED_TS": 1893427200,
+        "GRACE_REASON": "cpp.GRACE_REASON_UNKNOWN",
+        "GRACE_START_TIME": "",
+        "GRACE_START_TS": 0,
+        "LASTEST_API_VERSION": "1.0.0",
+        "LAST_CHECKIN_TIME": "",
+        "LAST_CHECKIN_TS": 0,
+        "LICENSE_ID": "LIC-XXXX-XXXXXX",
+        "LICENSE_STATUS": "active",
+        "OFFLINE_MAC": "",
+        "SERVER_TIME": "",
+        "URL": "https://verify.example.com"
+    },
+    "SYSTEM": {
+        "THEME": "auto",
+        "TIMEZONE": "Asia/Shanghai"
+    },
+    "SYSTEM_USER": {
+        "PASSWORD": "21232f297a57a5a743894a0e4a801fc3",
+        "USER": "admin"
+    },
+    "EMAIL": {
+        "ENABLED": false,
+        "SMTP_SERVER": "smtp.example.com",
+        "SMTP_PORT": 465,
+        "USE_SSL": true,
+        "USER": "",
+        "PASSWORD": "",
+        "RECEIVERS": []
+    }
+}

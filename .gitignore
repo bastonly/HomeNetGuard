@@ -1,0 +1,47 @@
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Frontend Build & Node Modules
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# Python Cache & Artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# Databases & Local Dynamic Data
+*.db
+*.db-wal
+*.db-shm
+*.bak
+backend/data/*.db
+backend/data/*.db*
+backend/data/*.bak
+
+# Logs
+*.log
+backend/config/*.log
+scripts/logs/*.log
+service/docker/*.log
+
+# Environment & Private Config Backups
+backend/config/base.conf.bak
+backend/config/banned_ips.txt
+scripts/config/*.bak
+
+# Binaries & Intermediate Build Artifacts
+service/src/*.o
+service/pc_service
+service/test_dlopen
+
+# IDE & Editor Configs
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,166 @@
+/* ================== Page Layout ================== */
+.page-container,
+.page {
+    padding: 16px;
+    background-color: var(--bg-page);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    color: var(--text-primary);
+}
+
+@media (max-width: 768px) {
+
+    .page-container,
+    .page {
+        padding: 12px;
+        min-height: auto;
+    }
+
+    .header-row,
+    .header,
+    .header-card,
+    .panel-head {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 10px !important;
+    }
+
+    .header-left,
+    .header-right {
+        width: 100%;
+        align-items: flex-start !important;
+    }
+
+    .title-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .hidden-xs {
+        display: none !important;
+    }
+
+    .refresh-circle {
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        padding: 0 !important;
+        border-radius: 999px !important;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--bg-card);
+        border: 1px solid var(--border-light);
+    }
+
+    .actions.mobile {
+        width: 100%;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: 10px;
+    }
+}
+
+/* ================== Header Section ================== */
+.header-row,
+.header,
+.header-card,
+.panel-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px;
+    border-radius: 14px;
+    border: 1px solid var(--border-light);
+    background: var(--bg-header);
+    backdrop-filter: var(--glass-blur);
+    flex-wrap: nowrap;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+.title {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.2;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: 0.2px;
+}
+
+.sub {
+    font-size: 12px;
+    color: var(--text-regular);
+    line-height: 1.35;
+}
+
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* ================== Panel / Card ================== */
+.panel,
+.card,
+.modern-card,
+.el-card,
+.table-shell {
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border-light) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Table Style Overrides for Dark Mode */
+.el-table {
+    --el-table-bg-color: var(--bg-card);
+    --el-table-tr-bg-color: var(--bg-card);
+    --el-table-header-bg-color: var(--bg-page);
+    --el-table-border-color: var(--border-light);
+    --el-table-text-color: var(--text-primary);
+    --el-table-header-text-color: var(--text-regular);
+}
+
+@media (max-width: 768px) {
+
+    .table-shell,
+    .mobile-list,
+    .mobile-container,
+    .mobile-naked {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+    }
+}
+
+.el-table th.el-table__cell {
+    background-color: var(--bg-page) !important;
+}
+
+/* Divider color */
+.el-divider--horizontal {
+    border-top-color: var(--divider-color) !important;
+}

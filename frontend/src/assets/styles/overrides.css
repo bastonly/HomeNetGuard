@@ -1,0 +1,77 @@
+/* ================== Element Plus Table Overrides ================== */
+
+/* Transparent Table Container */
+.el-table,
+.el-table__inner-wrapper,
+.el-table__body-wrapper,
+.el-table__header-wrapper {
+    background: transparent !important;
+}
+
+/* Remove default table borders */
+.el-table__inner-wrapper::before,
+.el-table__border-left-patch,
+.el-table--border::after,
+.el-table--group::after,
+.el-table::before {
+    height: 0 !important;
+    width: 0 !important;
+    display: none !important;
+}
+
+/* Header Cells */
+.el-table__header th,
+.el-table .el-table__header .el-table__cell {
+    background-color: transparent !important;
+    color: var(--text-regular) !important;
+    font-weight: 600 !important;
+    /* Unified weight */
+    padding: 12px 0 !important;
+    /* Unified padding, PolicyMgmt had 8px/14px, others 12px/18px - aiming for 12px as safe middle */
+    border-bottom: 1px solid var(--divider-color) !important;
+}
+
+/* Body Cells */
+.el-table__body td,
+.el-table .el-table__cell {
+    padding: 16px 0 !important;
+    /* Unified padding */
+    border-bottom: 1px solid var(--divider-color) !important;
+}
+
+
+/* ================== Element Plus Dialog Overrides ================== */
+
+/* Modern rounded dialog */
+.modern-dialog,
+.adaptive-dialog {
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+.modern-dialog .el-dialog__header,
+.adaptive-dialog .el-dialog__header {
+    margin-right: 0;
+    padding: 20px 24px 10px;
+}
+
+.modern-dialog .el-dialog__body,
+.adaptive-dialog .el-dialog__body {
+    padding: 10px 24px 24px !important;
+}
+
+/* Mobile full screen dialog adjustments if needed */
+@media (max-width: 768px) {
+
+    .modern-dialog,
+    .adaptive-dialog {
+        border-radius: 0 !important;
+    }
+}
+
+/* ================== Element Plus Tags Overrides ================== */
+.el-tag--info {
+    background-color: var(--border-light);
+    border-color: var(--divider-color);
+    color: var(--text-regular);
+}

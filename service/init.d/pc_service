@@ -1,0 +1,95 @@
+#!/bin/sh /etc/rc.common
+
+START=99
+STOP=10
+USE_PROCD=1
+
+NAME=pc_service
+PROG_SERVICE=/opt/parent-control/service/pc_service
+PROG_BACKEND=/opt/parent-control/backend
+
+start_service() {
+    # 0. Ensure DB Schema is up to date
+    "$PROG_SERVICE" --schema-db
+
+    # 1. PC Service (C++ Core Daemon)
+    procd_open_instance "core"
+    procd_set_param command "$PROG_SERVICE" --daemon
+    
+    # Respawn: retry indefinitely, 5s cooldown, no max retry limit
+    procd_set_param respawn ${respawn_threshold:-3600} ${respawn_timeout:-5} ${respawn_retry:-0}
+    
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_close_instance
+
+    # 2. Backend API (Python)
+    procd_open_instance "api"
+    procd_set_param env DISABLE_BG_TASKS=1
+    procd_set_param env PYTHONPATH=/opt/parent-control:/opt/parent-control/backend
+    procd_set_param command /usr/bin/python3 "$PROG_BACKEND/app.py"
+    procd_set_param respawn ${respawn_threshold:-3600} ${respawn_timeout:-5} ${respawn_retry:-0}
+    procd_set_param stdout 1
+    procd_set_param stderr 1
+    procd_close_instance
+}
+
+EXTRA_COMMANDS="debug activate checkin version schema-db"
+
+activate() {
+    local code="$1"
+    if [ -z "$code" ]; then
+        echo "Usage: /etc/init.d/pc_service activate <activation_code>"
+        return 1
+    fi
+    "$PROG_SERVICE" --activate "$code"
+}
+
+checkin() {
+    "$PROG_SERVICE" --checkin
+}
+
+version() {
+    "$PROG_SERVICE" --version
+}
+
+schema_db() {
+    "$PROG_SERVICE" --schema-db
+}
+
+debug() {
+    echo "=== pc_service DEBUG MODE ==="
+    
+    # 直接 kill 进程，不递归调用 stop（避免 flock 死锁）
+    echo "Killing running processes..."
+    kill -9 $(ps -w | grep "$PROG_SERVICE" | grep -v grep | awk '{print $1}') 2>/dev/null || true
+    killall -9 python3 gunicorn 2>/dev/null || true
+    rm -f /var/lock/pc_service.lock /var/lock/procd_pc_service.lock
+    sleep 2
+
+    echo "Starting services in DEBUG mode (Ctrl+C to stop)..."
+
+    trap 'echo "Stopping..."; kill ${PID_PY} ${PID_CPP} 2>/dev/null; exit 0' INT TERM
+
+    # Python Backend (Foreground)
+    export PYTHONUNBUFFERED=1
+    export DISABLE_BG_TASKS=1
+    export PYTHONPATH=/opt/parent-control:/opt/parent-control/backend
+    export FLASK_DEBUG=1
+
+    echo "[Debug] Starting Python Backend..."
+    cd "$PROG_BACKEND"
+    /usr/bin/python3 app.py &
+    PID_PY=$!
+
+    echo "[Debug] Ensuring DB Schema..."
+    "$PROG_SERVICE" --schema-db
+
+    echo "[Debug] Starting C++ Service..."
+    "$PROG_SERVICE" --daemon &
+    PID_CPP=$!
+
+    echo "[Debug] PIDs: C++=$PID_CPP  Python=$PID_PY"
+    echo "[Debug] Press Ctrl+C to stop both."
+    wait
+}
